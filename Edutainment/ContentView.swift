@@ -10,7 +10,7 @@ struct ContentView: View {
     @State private var Multiplicator = 15
     @State private var ÜbungsfragenAnzahl = 5
     @State private var guesses = Array(repeating: 0, count: 20)
-    @State private var MultiplicatorArray = [1, 4 , 3, 2 , 5, 7 , 6, 12, 10, 8, 9, 11].shuffled()
+    @State private var MultiplicatorArray = [2,3,4,5,6,7,8,9,10,Int.random(in: 1...10), Int.random(in: 1...10)].shuffled()
     @State private var showAnswers = Array(repeating: false, count: 20)
     @State private var einmaleins = "großes 1x1"
     
@@ -22,10 +22,14 @@ struct ContentView: View {
                     Picker("Hello", selection: $einmaleins){
                         Text("Großes 1x1").tag("großes 1x1")
                         Text("Kleines 1x1").tag("kleines 1x1")
+                        
                     }
                     .labelsHidden()
                     .pickerStyle(SegmentedPickerStyle())
                     .onChange(of: einmaleins) {
+                        updateeinmaleins()
+                    }
+                    .onAppear{
                         updateeinmaleins()
                     }
                 }
@@ -35,8 +39,14 @@ struct ContentView: View {
                 }
                 Section("Wie viele Übungsfragen möchtest du?") {
                     Picker("Test", selection: $ÜbungsfragenAnzahl) {
-                        ForEach(0..<21) {
-                            Text("\($0)")
+                        if einmaleins == "kleines 1x1"{
+                            ForEach(0..<11) {
+                                Text("\($0)")
+                            }
+                        } else{
+                            ForEach(0..<21) {
+                                Text("\($0)")
+                            }
                         }
                     }
                     .labelsHidden()
@@ -44,7 +54,7 @@ struct ContentView: View {
                 }
                 Section("Übungsfragen"){
                     ForEach(0..<ÜbungsfragenAnzahl, id: \.self){ number in
-                        let randomQuestionMultiplikator = Int.random(in: 1...12)
+                        let randomQuestionMultiplikator = MultiplicatorArray[number]
                         VStack{
                             HStack{
                                 VStack(alignment: .leading){
@@ -100,8 +110,10 @@ struct ContentView: View {
     func updateeinmaleins(){
         if einmaleins == "großes 1x1"{
             Multiplicator = 15
+            MultiplicatorArray = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].shuffled()
         } else{
             Multiplicator = 5
+            MultiplicatorArray = [2,3,4,5,6,7,8,9,10, Int.random(in: 1...10), Int.random(in: 1...10)].shuffled()
         }
     }
 }
