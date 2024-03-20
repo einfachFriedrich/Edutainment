@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
                 Section("Übungsfragen"){
                     ForEach(0..<ÜbungsfragenAnzahl, id: \.self){ number in
-                        let randomQuestionMultiplikator = MultiplicatorArray.randomElement() ?? 0
+                        let randomQuestionMultiplikator = MultiplicatorArray[number + 1]
                         VStack{
                             HStack{
                                 VStack(alignment: .leading){
