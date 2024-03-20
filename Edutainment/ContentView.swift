@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var MultiplicatorArray = [2,3,4,5,6,7,8,9,10,Int.random(in: 1...10), Int.random(in: 1...10)].shuffled()
     @State private var showAnswers = Array(repeating: false, count: 20)
     @State private var einmaleins = "großes 1x1"
+    @State private var checkAll = false
     
     
     var body: some View {
@@ -54,6 +55,7 @@ struct ContentView: View {
                 }
                 Section("Übungsfragen"){
                     ForEach(0..<ÜbungsfragenAnzahl, id: \.self){ number in
+                        
                         let randomQuestionMultiplikator = MultiplicatorArray[number]
                         VStack{
                             HStack{
@@ -72,7 +74,7 @@ struct ContentView: View {
                                 .frame(width: 100, height: 50)
                                 
                             }
-                            if showAnswers[number] == true{
+                            if checkAll || showAnswers[number] == true && guesses[number] != 0{
                                 Spacer()
                                 if checkAnswer(RandomMultiplicator: randomQuestionMultiplikator, userAnswer: guesses[number]){
                                     Text("Richtig ✅")
@@ -93,6 +95,11 @@ struct ContentView: View {
             .toolbar{
                 Button("Neue Fragen"){
                     MultiplicatorArray = MultiplicatorArray.shuffled()
+                    guesses = Array(repeating: 0, count: 20)
+                    checkAll = false
+                }
+                Button(checkAll ? "Antorten verstecken" : "Überprüfen"){
+                    checkAll.toggle()
                 }
             }
             .navigationTitle(einmaleins == "großes 1x1" ? "Das große 1x1" : "Das kleine 1x1")
@@ -113,6 +120,9 @@ struct ContentView: View {
             MultiplicatorArray = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].shuffled()
         } else{
             Multiplicator = 5
+            if ÜbungsfragenAnzahl > 10{
+                ÜbungsfragenAnzahl = 10
+            }
             MultiplicatorArray = [2,3,4,5,6,7,8,9,10, Int.random(in: 1...10), Int.random(in: 1...10)].shuffled()
         }
     }
