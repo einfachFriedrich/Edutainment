@@ -8,7 +8,7 @@
 import SwiftUI
 struct ContentView: View {
     @State private var Multiplicator = 2
-    @State private var ÜbungsfragenAnzahl = 1
+    @State private var ÜbungsfragenAnzahl = 5
     @State private var guesses = Array(repeating: 0, count: 20)
     @State private var guess = 0
     @State private var MultiplicatorArray = [1, 4 , 3, 2 , 5, 7 , 6, 12, 10, 8, 9, 11].shuffled()
@@ -18,7 +18,7 @@ struct ContentView: View {
         NavigationStack{
             Form{
                 Section("Welchen Multiplikator möchtest du üben?"){
-                    Stepper("\(Multiplicator)", value: $Multiplicator)
+                    Stepper("\(Multiplicator)", value: $Multiplicator, in: 1...12)
                 }
                 Section("Wie viele Übungsfragen möchtest du?") {
                     Picker("Test", selection: $ÜbungsfragenAnzahl) {
@@ -26,27 +26,39 @@ struct ContentView: View {
                             Text("\($0)")
                         }
                     }
+                    .labelsHidden()
+                    .pickerStyle(.wheel)
                 }
                 Section("Übungsfragen"){
                     ForEach(0..<ÜbungsfragenAnzahl, id: \.self){ number in
                         let randomQuestionMultiplikator = MultiplicatorArray[number]
-                        HStack{
-                            VStack(alignment: .leading){
-                                Text("Was ist \(Multiplicator) * \(randomQuestionMultiplikator)?")
-                                TextField("Antwort", value: $guess, formatter: NumberFormatter())
+                        VStack{
+                            HStack{
+                                VStack(alignment: .leading){
+                                    Text("Was ist \(Multiplicator) * \(randomQuestionMultiplikator)?")
+                                    TextField("Antwort", value: $guesses[number], formatter: NumberFormatter())
+                                    
+                                }
                                 
-                                if showAnswers[number] == true{
-                                    if checkAnswer(RandomMultiplicator: randomQuestionMultiplikator, userAnswer: guess){
-                                        Text("Richtig ✅")
-                                    } else{
-                                        Text("Falsch ❌")
-                                    }
+                                Button("Überprüfen") {
+                                    
+                                    showAnswers[number].toggle()
+                                    
+                                }
+                                .frame(width: 100, height: 50)
+                                
+                            }
+                            if showAnswers[number] == true{
+                                Spacer()
+                                if checkAnswer(RandomMultiplicator: randomQuestionMultiplikator, userAnswer: guesses[number]){
+                                    Text("Richtig ✅")
+                                } else{
+                                    Text("Falsch ❌")
                                 }
                             }
-                            Button("Überprüfen") {
-                                showAnswers[number] = true
-                            }
                         }
+                        .padding(.top, 10)
+                        .padding(.bottom, 10)
                     }
                     
                 }
