@@ -117,7 +117,7 @@ struct ContentView: View {
     func updateeinmaleins(){
         if einmaleins == "großes 1x1"{
             Multiplicator = 15
-            MultiplicatorArray = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].shuffled()
+            MultiplicatorArray = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, Int.random(in: 1...20), Int.random(in: 1...20)].shuffled()
         } else{
             Multiplicator = 5
             if ÜbungsfragenAnzahl > 10{
